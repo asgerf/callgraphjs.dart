@@ -1,5 +1,4 @@
 name: callgraphjs
 description: A sample command-line application
 dependencies:
-  parsejs:
-    path: ../parsejs
+  parsejs: any
