@@ -3,12 +3,12 @@ library jscallgraphs;
 import 'package:parsejs/parsejs.dart';
 import 'dart:math';
 
-
 class FlowNode {
   List<FlowNode> predecessors = <FlowNode>[];
   
   FunctionNode function;
   CallExpression call;
+  List<String> natives = <String>[];
   
   void flowTo(FlowNode other) {
     other.predecessors.add(this);
@@ -61,14 +61,16 @@ class FlowGraph {
     from.flowTo(to);
   }
   
-  List<FunctionNode> findCallTargets(CallExpression call) {
-    List<FunctionNode> result = <FunctionNode>[];
+  /// Returns a mixed list of FunctionNode and Strings, denoting user-defined and native call targets, respectively.
+  List<dynamic> findCallTargets(CallExpression call) {
+    List result = [];
     Set<FlowNode> seen = new Set<FlowNode>();
     void search(FlowNode node) {
       if (!seen.add(node)) return;
       if (node.function != null) {
         result.add(node.function);
       }
+      result.addAll(node.natives);
       node.predecessors.forEach(search);
     }
     search(getCallee(call));

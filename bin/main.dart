@@ -1,16 +1,20 @@
 import 'flowgraph.dart';
 import 'package:parsejs/parsejs.dart';
 import 'dart:io';
+import 'natives.dart';
 
 void main(List<String> args) {
   String filename = args[0];
   new File(filename).readAsString().then((String code) {
     Program ast = parsejs(code, filename: filename);
     FlowGraph flowGraph = buildFlowGraph(ast);
+    addNatives(flowGraph);
     
     new File('flowgraph.dot').writeAsString(flowGraph.toDot());
     
-    String functionName(FunctionNode node) {
+    String functionName(target) {
+      if (target is String) return target;
+      FunctionNode node = target;
       if (node.name != null) {
         return node.name.value;
       }
@@ -25,7 +29,7 @@ void main(List<String> args) {
     
     findCalls(Node node) {
       if (node is CallExpression) {
-        List<FunctionNode> targets = flowGraph.findCallTargets(node);
+        List targets = flowGraph.findCallTargets(node);
         print("${node.location}: ${targets.map(functionName).join(', ')}");
       }
       node.forEach(findCalls);

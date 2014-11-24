@@ -1,9 +1,5 @@
-name: jscallgraphs
+name: callgraphjs
 description: A sample command-line application
-#dev_dependencies:
-#  unittest: any
-
 dependencies:
   parsejs:
-    path:
-      ../parsejs
+    path: ../parsejs
