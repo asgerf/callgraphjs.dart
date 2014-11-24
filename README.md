@@ -11,5 +11,8 @@ Example usage
 -------------
 
     git checkout https://github.com/asgerf/callgraphjs.dart
-    cd callgraphjs.dart/bin
+    cd callgraphjs.dart
+    pub get
+    
+    cd bin
     dart main.dart ../benchmarks/deltablue.js
